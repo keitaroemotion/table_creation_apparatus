@@ -14,8 +14,7 @@ def read_dsl_line(line):
     return line.rstrip('\n').split('|')
 
 def map_dsl_array(dslarray):
-    vars = getVariables(dslarray)
-    return [get_tables(dslarray, vars), vars]
+    return (lambda vars: [get_tables(dslarray, vars), vars])(getVariables(dslarray))
 
 def puts(l):
     print(l)
@@ -68,8 +67,7 @@ def makeQuery(arrs, vars, tpf):
     return "create table %s (%s) %s" % (arrs[0][0]+tpf , combine(arrs[1:]), getTail(arrs[1:], vars) )
 
 def getTail(list, vars):
-    res = [getTailSubRoutine(x[0].strip().split("="), vars) for x in list if "=" in x[0]]
-    return len(res) > 0 and res[0] or ""
+    return (lambda res: len(res) > 0 and res[0] or "")([(lambda x,y : x[0].strip() == "$tail" and y.get(x[1].strip()) or [""])(x[0].strip().split("="), vars[0]) for x in list if "=" in x[0]])
 
 def getTailSubRoutine(x, vars):
     return x[0].strip() == "$tail" and vars[0].get(x[1].strip()) or [""]  
