@@ -69,9 +69,6 @@ def makeQuery(arrs, vars, tpf):
 def getTail(list, vars):
     return (lambda res: len(res) > 0 and res[0] or "")([(lambda x,y : x[0].strip() == "$tail" and y.get(x[1].strip()) or [""])(x[0].strip().split("="), vars[0]) for x in list if "=" in x[0]])
 
-def getTailSubRoutine(x, vars):
-    return x[0].strip() == "$tail" and vars[0].get(x[1].strip()) or [""]  
-
 def remove_g(arr):
     return [puts(x) for x in arr if ("$tail" in x) == False]
 
