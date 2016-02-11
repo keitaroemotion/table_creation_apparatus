@@ -58,10 +58,7 @@ def add_to_buckets(member, bucket):
     return add_to_hash(bucket, member.split("="))
 
 def makeQueries(file, tpf=""):
-    return makeQueriesSubRoutine(map_dsl_array(file_into_array(file)), tpf)
-
-def makeQueriesSubRoutine(arr, tpf):
-    return [makeQuery(x, arr[1], tpf) for x in arr[0] if len(x) > 0]
+    return (lambda arr, tpf: [makeQuery(x, arr[1], tpf) for x in arr[0] if len(x) > 0])(map_dsl_array(file_into_array(file)), tpf)
 
 def makeQuery(arrs, vars, tpf):
     return "create table %s (%s) %s" % (arrs[0][0]+tpf , combine(arrs[1:]), getTail(arrs[1:], vars) )
